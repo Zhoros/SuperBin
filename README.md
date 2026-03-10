@@ -6,6 +6,8 @@ File sharing, url shortener and pastebin all in one place with QR code and curl 
 |--------------------------------|--------------------------------|
 | ![](https://github.com/user-attachments/assets/34997223-8a08-4707-8490-9c9941f59141) | ![](https://github.com/user-attachments/assets/a54146fb-9c5f-46f2-a79b-c338e9272b53) |
 
+# I'm open to work
+see my github profile for my email
 
 # Why it's better than other similar apps :zap:
 - works in mobile browsers, can upload file / text with ctrl+v, drag and drop, browse file or through terminal
