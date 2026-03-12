@@ -1,6 +1,3 @@
-# I'm open to work
-see my github profile for my email
-
 # SuperBin
 File sharing, url shortener and pastebin all in one place with QR code and curl support. Uses stream based cryptography and data processing that can handle gigabytes of data with fixed memory and cpu usage. It can run on anything including PaaS like repl.it or Render and is very easy to customize.  
 <ins>**Please star this project if you find it useful, thank you!**</ins>
