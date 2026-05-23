@@ -2,15 +2,12 @@
 File sharing, url shortener and pastebin all in one place with QR code and curl support. Uses stream based cryptography and data processing that can handle gigabytes of data with fixed memory and cpu usage. It can run on anything including PaaS like repl.it or Render and is very easy to customize.  
 <ins>**Please star this project if you find it useful, thank you!**</ins>
 
-| ![](https://github.com/user-attachments/assets/d75999e5-736a-4ef4-80e8-c9a77079ed45) | ![](https://github.com/user-attachments/assets/80bab1ca-0685-4939-a999-8392d7c1bc8b) |
-|--------------------------------|--------------------------------|
-| ![](https://github.com/user-attachments/assets/34997223-8a08-4707-8490-9c9941f59141) | ![](https://github.com/user-attachments/assets/a54146fb-9c5f-46f2-a79b-c338e9272b53) |
+<img width="1763" height="844" alt="image" src="https://github.com/user-attachments/assets/9245c016-fa88-40d2-8d75-7b68559e85de" />
 
 # Why it's better than other similar apps :zap:
 - works in mobile browsers, can upload file / text with ctrl+v, drag and drop, browse file or through terminal
 - Support password authentication (for both upload & download)
 - Extremely easy to set up, all you need is `go build .` or use the docker-compose.yaml and it's done
-- Very easy for modifications, don't like the style? pick a .css file from [here](https://github.com/dbohdan/classless-css) and replace the `static/theme.css`, don't like the layout? the html page is well commented and structured
 - Can run on any OS or deployment platforms like repl.it, render, fly.io, etc
 - Encryption done right, password protected data are secured with AES & pbkdf2
 - Decryption is done on the fly, the encrypted data is never decrypted to the disk
@@ -19,9 +16,6 @@ File sharing, url shortener and pastebin all in one place with QR code and curl 
 
 # URL shortener 🔗
 simply paste any valid url (must start with `http://` or `https://`) to the textbox and upload
-
-# Dont like how it looks? 🎨
-pick a .css file from [here](https://github.com/dbohdan/classless-css) and replace the `static/theme.css`, or search for "classless css"
 
 # How to build with docker :whale2:
 1. Download / clone this repo
