@@ -8,58 +8,66 @@ GigaPaste is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 You should have received a copy of the GNU General Public License along with GigaPaste. If not, see <https://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="theme.css">
-	<link rel="stylesheet" href="style.css"></link>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="tailwind.js"></script>
 	<script src="helper.js"></script>
 
 	<script>
-
 		function copy(){
-
-			copyToClipboard(document.getElementById("text").textContent)
-
+			copyToClipboard(document.getElementById("text").textContent);
 		}
 
 		function getRawLink(){
-
 			if(new URL(window.location.href).search.length > 0){
-				copyToClipboard(window.location.href + "&raw=1")
+				copyToClipboard(window.location.href + "&raw=1");
 			}else{
-				copyToClipboard(window.location.href + "?raw=1")
+				copyToClipboard(window.location.href + "?raw=1");
 			}
-
 		}
-
 	</script>
 
 </head>
-<body>
+<body class="bg-zinc-950 text-zinc-100 min-h-full antialiased flex flex-col p-3 sm:p-4 selection:bg-indigo-500/30 selection:text-indigo-200">
 	
-	<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100%; padding: 10px; box-sizing: border-box;">
+	<!-- MAIN CONTAINER -->
+	<div class="w-full max-w-5xl mx-auto flex-1 flex flex-col gap-4 h-full">
 
-		<div style="justify-content: center; width: calc(100% - 20px); flex: 1; overflow: auto;">
+		<!-- CODE VIEWPORT WINDOW -->
+		<div class="w-full flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl overflow-hidden flex min-h-[350px]">
+			<div class="w-full overflow-auto p-4 pt-7 font-mono text-sm leading-relaxed text-zinc-200">
+				<pre id="text" class="w-full whitespace-pre-wrap break-all focus:outline-none">{{ .Text }}</pre>
+			</div>
+		</div>
+
+		<!-- TOOLBAR ACTION BOARD -->
+		<div class="w-full flex flex-col sm:flex-row gap-2.5 items-center justify-between mt-1">
 			
-			<pre id="text" style="overflow: auto; word-break: normal; width: 100%; height: 100%; margin: 0">{{ .Text }}</pre>
-		
+			<!-- Return Trigger Navigation -->
+			<button onclick="window.location.href = '/'" class="w-full sm:w-auto min-w-[120px] order-3 sm:order-1 bg-zinc-900 hover:bg-zinc-850 text-zinc-400 hover:text-zinc-200 text-xs font-semibold py-3 px-5 rounded-xl border border-zinc-800 active:scale-95 transition shadow-md">
+				New Paste
+			</button>
+
+			<!-- Action Content Modifiers -->
+			<div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2 order-1 sm:order-2 flex-1 sm:flex-none justify-end">
+				
+				<button onclick="copy()" class="w-full sm:w-[160px] bg-zinc-800 hover:bg-indigo-950/30 hover:text-indigo-400 hover:border-indigo-900/50 text-zinc-200 text-xs font-semibold py-3 px-4 rounded-xl border border-zinc-700 active:scale-95 transition shadow-md">
+					Copy Content
+				</button>
+				
+				{{ if ne .Burn "1" }}
+				<button onclick="getRawLink()" class="w-full sm:w-[160px] bg-zinc-800 hover:bg-indigo-950/30 hover:text-indigo-400 hover:border-indigo-900/50 text-zinc-200 text-xs font-semibold py-3 px-4 rounded-xl border border-zinc-700 active:scale-95 transition shadow-md">
+					Copy Raw Link
+				</button>
+				{{ end }}
+
+			</div>
 		</div>
-
-		<div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-
-			<button onclick="copy()" style="width: 200px;">Copy all</button>
-			{{ if ne .Burn "1" }}
-			<button onclick="getRawLink()" style="width: 200px;">Copy raw link</button>
-			{{ end }}
-		</div>
-
-		<button onclick="window.location.href = '/'" style="width: 200px">New</button>
 
 	</div>
 	
 </body>
-
 </html>

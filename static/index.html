@@ -8,91 +8,107 @@ GigaPaste is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 You should have received a copy of the GNU General Public License along with GigaPaste. If not, see <https://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="theme.css">
-	<link rel="stylesheet" href="style.css"></link>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="tailwind.js"></script>
 	<script src="qrcode.js"></script>
 	<script src="script.js"></script>
 	<script src="helper.js"></script>
 
 </head>
-<body>
+<body class="bg-zinc-950 text-zinc-100 min-h-full antialiased flex flex-col justify-between p-3 sm:p-4 selection:bg-indigo-500/30 selection:text-indigo-200">
 	
 	<!-- MAIN CONTAINER -->
-	<div style="width: 100%; height: 100%;">
+	<div class="w-full max-w-4xl mx-auto flex-1 flex flex-col gap-4">
 
-		<!-- need nested container because on smaller screen padding creates scroll -->
-		<div style="display: flex; flex-direction: column; width: 100%; height: 100%; gap: 10px; padding: 10px; box-sizing: border-box">
-
-			<!-- BIG BUTTON -->
-			<div style="display: flex; justify-content: center;"> 
-				<button id="customUpload" for="fileInput" class="rspText">
-					Click here, drag &amp; drop, or Ctrl + v anywhere to select file
-				</button>
-				<input multiple id="fileInput" type="file" style="display: none"/>
-			</div>
+		<!-- BIG FILE UPLOAD BUTTON -->
+		<div class="w-full"> 
+			<button id="customUpload" for="fileInput" class="rspText w-full group relative flex flex-col items-center justify-center border-2 border-dashed border-zinc-800 hover:border-indigo-500/50 bg-zinc-900/40 hover:bg-zinc-900/80 p-6 sm:p-10 rounded-2xl transition-all duration-200 active:scale-[0.99] cursor-pointer text-zinc-400 hover:text-zinc-200">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-3 text-zinc-500 group-hover:text-indigo-400 transition-colors">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+				</svg>
+				<span class="text-sm font-medium text-center px-4 leading-relaxed">
+					Click here, drag &amp; drop, or <kbd class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded text-xs mx-1 border border-zinc-700 shadow-sm">Ctrl</kbd> + <kbd class="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded text-xs border border-zinc-700 shadow-sm">v</kbd> anywhere to select file
+				</span>
+			</button>
+			<input multiple id="fileInput" type="file" class="hidden"/>
+		</div>
+		
+		<!-- OPTIONS BAR -->
+		<div class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-center gap-4">
 			
-			<!-- OPTIONS -->
-			<div style="display: flex; justify-content: center;">
-				<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px 10px;">
-					<input id="password" placeholder="password" type="password" class="rspText" style="width: 150px">
-					<div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
-						<input id="duration" placeholder="duration" type="number" class="rspText" style="width: 100px">
-						<!--Need to use auto because with current theme it breaks the select width-->
-						<select id="durationModifiers" name="options" class="rspText" style="width: 100px;">
-							<option value="minutes">minutes</option>
-							<option value="hours">hours</option>
-							<option value="days">days</option>
-							<option value="months">months</option>
-							<option value="years">years</option>
-						</select>
-					</div>
-					<div style="display: flex; gap: 10px">
-						<input id="burn" type="checkbox"></input>
-						<label for="burn">Burn after open</label>
-					</div>
-				</div>
+			<!-- Password -->
+			<div class="flex-1 min-w-[160px]">
+				<input id="password" placeholder="password" type="password" class="rspText w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 transition" />
 			</div>
 
-			<!-- TEXT INPUT -->
-			<div style="display: flex; justify-content: center; flex-grow: 1">
-				<textarea id="textarea" style="font-size: 1em"></textarea>
+			<!-- Duration Context Compound Input -->
+			<div class="flex items-center bg-zinc-950 border border-zinc-800 rounded-xl px-1 py-1 focus-within:ring-1 focus-within:ring-indigo-500/50 transition flex-1 min-w-[200px]">
+				<input id="duration" placeholder="duration" type="number" class="rspText w-full bg-transparent border-0 px-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+				<select id="durationModifiers" name="options" class="rspText bg-zinc-900 text-zinc-300 border border-zinc-800 rounded-lg text-xs font-medium px-2.5 py-1.5 focus:outline-none cursor-pointer hover:bg-zinc-850 hover:text-zinc-100 transition mr-0.5">
+					<option value="minutes" class="bg-zinc-900">minutes</option>
+					<option value="hours" class="bg-zinc-900">hours</option>
+					<option value="days" class="bg-zinc-900">days</option>
+					<option value="months" class="bg-zinc-900">months</option>
+					<option value="years" class="bg-zinc-900">years</option>
+				</select>
 			</div>
 
-			<!-- UPLOAD -->
-			<div style="display: flex; justify-content: center;">
-				<button id="upload" onclick="upload()" class="rspText">Upload text (Ctrl + Enter)</button>
+			<!-- Checkbox Toggle -->
+			<div class="flex items-center gap-2.5 px-2 py-1 select-none shrink-0">
+				<input id="burn" type="checkbox" class="w-4 h-4 rounded border-zinc-800 bg-zinc-950 text-indigo-600 focus:ring-0 focus:ring-offset-0 accent-indigo-500 transition cursor-pointer" />
+				<label for="burn" class="text-sm font-medium text-zinc-400 hover:text-zinc-300 transition cursor-pointer">Burn after open</label>
 			</div>
+		</div>
 
+		<!-- TEXT INPUT (GROW ELEMENT) -->
+		<div class="w-full flex-1 flex min-h-[300px]">
+			<textarea id="textarea" placeholder="Paste your text or code snippet here..." class="w-full flex-1 bg-zinc-900 border border-zinc-800 rounded-2xl p-4 text-sm font-mono text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-800 resize-none shadow-inner leading-relaxed"></textarea>
+		</div>
+
+		<!-- UPLOAD CONTEXT TRIGGER -->
+		<div class="w-full">
+			<button id="upload" onclick="upload()" class="rspText w-full bg-zinc-800 hover:bg-indigo-950/30 hover:text-indigo-400 hover:border-indigo-900/50 text-zinc-200 text-sm font-semibold py-3.5 px-4 rounded-xl border border-zinc-700 active:scale-[0.99] transition shadow-lg">
+				Upload text (Ctrl + Enter)
+			</button>
 		</div>
 
 	</div>
 
 	<!-- UPLOAD PROGRESS OVERLAY -->
-	<div id="progressPage" class="progress">
+	<div id="progressPage" class="progress fixed inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 z-50 transition-opacity hidden">
 
-		<div id="qrcode"></div>
-		<div>
-			<label id="uploadPercent">0%</label>
-		</div>
-		<div id="uploadInfo" style="display: none; align-items: center; flex-direction: column; gap: 10px">
-			<div>
-				<label id="link"></label>
+		<!-- Wrapper card inside overlay -->
+		<div class="bg-zinc-900 border border-zinc-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl flex flex-col items-center gap-5 text-center">
+			
+			<div id="qrcode" class="bg-white p-3 rounded-xl shadow-lg [&_img]:mx-auto"></div>
+			
+			<div class="w-full">
+				<div class="text-2xl font-black text-indigo-400 tracking-tight" id="uploadPercent">0%</div>
+				<div class="text-xs text-zinc-500 font-medium mt-1 uppercase tracking-wider">Transfer Progress</div>
 			</div>
-			<div>
-				<button id="copyLinkButton" onclick="copyLink()">Copy link</button>
+
+			<div id="uploadInfo" class="w-full flex flex-col gap-4 border-t border-zinc-800 pt-4 hidden">
+				<div class="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2.5 break-all text-xs font-mono text-zinc-300 shadow-inner select-all" id="link">
+					<!-- Link injecting slot -->
+				</div>
+				
+				<div class="flex gap-2 w-full">
+					<button id="copyLinkButton" onclick="copyLink()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs font-semibold py-2.5 px-4 rounded-lg transition shadow-md shadow-indigo-600/10">
+						Copy link
+					</button>
+					<button onclick="location.reload()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 active:scale-95 text-zinc-200 text-xs font-semibold py-2.5 px-4 rounded-lg border border-zinc-700 transition">
+						New
+					</button>
+				</div>
 			</div>
-			<div>
-				<button onclick="location.reload()">New</button>
-			</div>
+
 		</div>
 
 	</div>
 
-	</body>
-
+</body>
 </html>

@@ -8,72 +8,93 @@ GigaPaste is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 You should have received a copy of the GNU General Public License along with GigaPaste. If not, see <https://www.gnu.org/licenses/>.
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="theme.css">
-	<link rel="stylesheet" href="style.css"></link>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="tailwind.js"></script>
 
 	<script>
-	
 		function submitClicked(){
+			// Reset error view states on click execution
+			const errorLabel = document.getElementById("wrong");
+			errorLabel.classList.add("hidden");
+			errorLabel.innerHTML = "";
 
 			fetch('/auth', {
-
 				method: 'POST',
 				headers: {
-				'Content-Type': 'application/json',
+					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({key: document.getElementById("key").value})
-
 			})
 			.then(response => {
-				
 				if(!response.ok){
-
 					throw new Error('Network response was not ok ' + response.statusText);
-
 				}
-
 				return response.text();
-
 			}).then(data => {
-
 				if(data == "done"){
-				
-					window.location.href = "/"
-
+					window.location.href = "/";
 				}
 				if(data == "wrong"){
-
-					document.getElementById("wrong").innerHTML = "Wrong password";
-
+					errorLabel.innerHTML = "Wrong password";
+					errorLabel.classList.remove("hidden");
 				}
-
 			});
-
 		}
-
 	</script>
 
 </head>
 
-<body>
+<body class="bg-zinc-950 text-zinc-100 min-h-full antialiased flex justify-center px-4">
 	
-	<div style="display: flex; align-items: center; flex-direction: column; width: 100%; height: 100%;">
+	<div class="w-full max-w-sm flex flex-col items-center">
 
-		<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 100px">
+		<div style="margin-top: 100px" class="w-full">
 
-			<input id="key" name="key" type="password" placeholder="password" style="width: auto"></input>
-			<button onclick="submitClicked()" style="width: 100%">Submit</button>
-			<span id="wrong"></span>
+			<!-- Central Panel Box Matrix -->
+			<div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+				
+				<div class="flex flex-col items-center text-center gap-1.5 mb-2">
+					<!-- Shield Vector Node -->
+					<div class="p-3 bg-zinc-950 border border-zinc-850 rounded-xl text-indigo-400 mb-1 shadow-inner">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-5 h-5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+						</svg>
+					</div>
+					<h1 class="text-base font-bold text-zinc-100 tracking-tight">Enter password</h1>
+					<p class="text-xs text-zinc-500 font-medium">Provide your password to access dashboard</p>
+				</div>
+
+				<!-- Password input element frame -->
+				<div class="w-full">
+					<input 
+						id="key" 
+						name="key" 
+						type="password" 
+						placeholder="Password" 
+						class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-indigo-500/50 transition shadow-inner"
+						onkeydown="if(event.key === 'Enter') submitClicked()"
+					/>
+				</div>
+				
+				<!-- Error Message Area -->
+				<span id="wrong" class="text-xs font-semibold text-red-400 bg-red-500/5 border border-red-500/10 rounded-lg px-3 py-2 text-center hidden transition-all duration-150"></span>
+
+				<!-- Action Submit execution node -->
+				<button 
+					onclick="submitClicked()" 
+					class="w-full bg-zinc-800 hover:bg-indigo-950/30 hover:text-indigo-400 hover:border-indigo-900/50 text-zinc-200 text-xs font-semibold py-2.5 px-4 rounded-xl border border-zinc-700 active:scale-[0.98] transition shadow-md"
+				>
+					Enter
+				</button>
+			</div>
 
 		</div>
 
 	</div>
 	
 </body>
-
 </html>
