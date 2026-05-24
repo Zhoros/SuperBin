@@ -9,5 +9,5 @@
 	"cmdUploadDefaultDurationMinute" : 10,
 	
 	"enablePassword" : false,
-	"password" : "password"
+	"password" : ""
 }

@@ -508,13 +508,22 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 		}
 
-		//URL shortener
-		_, err = url.ParseRequestURI(text)
-		//if it's valid url
-		if err == nil {
-
+		// URL shortener with open redirect protection
+		parsedURL, err := url.ParseRequestURI(text)
+		shouldRedirect := err == nil
+		if shouldRedirect {
+			// Block non-http/https schemes (javascript:, data:, etc.)
+			if parsedURL.Scheme != "" && parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+				shouldRedirect = false
+			}
+			// Block open redirect to external hosts
+			if parsedURL.Host != "" && parsedURL.Host != r.Host {
+				shouldRedirect = false
+			}
+		}
+		if shouldRedirect {
 			http.Redirect(w, r, text, http.StatusSeeOther)
-
+			return
 		} else {
 
 			tmpl, err := template.ParseFS(templateFiles, "templates/pasteTemplate.html")

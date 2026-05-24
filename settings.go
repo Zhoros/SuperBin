@@ -45,4 +45,20 @@ func InitSettings() {
 		return
 	}
 
+	// Reject weak or default password when password protection is enabled
+	if Global.EnablePassword {
+		if Global.Password == "" {
+			fmt.Fprintf(os.Stderr, "fatal: enablePassword is true but password is empty. Set a strong password in data/settings.json\n")
+			os.Exit(1)
+		}
+		if Global.Password == "password" {
+			fmt.Fprintf(os.Stderr, "fatal: password is set to the default value 'password'. Please change it to a strong password in data/settings.json\n")
+			os.Exit(1)
+		}
+		if len(Global.Password) < 8 {
+			fmt.Fprintf(os.Stderr, "fatal: password is too short (%d characters). Use at least 8 characters.\n", len(Global.Password))
+			os.Exit(1)
+		}
+	}
+
 }
