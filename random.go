@@ -11,8 +11,8 @@ You should have received a copy of the GNU General Public License along with Gig
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
-	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -20,16 +20,6 @@ import (
 
 // we want to avoid ambiguous characters like i, I, l, 1, etc
 const charset = "abcdefghkmnpqrstwxyzABCDEFGHJKLMNPQRSTWXYZ23456789"
-
-var seed rand.Source
-var random *rand.Rand
-
-func init() {
-
-	seed = rand.NewSource(time.Now().UnixNano())
-	random = rand.New(seed)
-
-}
 
 func GenRandFileName(basePath string, extension string) string {
 
@@ -47,7 +37,7 @@ func GenRandPath(length int, db *sql.DB) string {
 
 	for {
 
-		randPath := genRandString(6)
+		randPath := genRandString(length)
 		var id string
 
 		db.QueryRow("SELECT id FROM data WHERE id = ?", randPath).Scan(&id)
@@ -61,9 +51,24 @@ func GenRandPath(length int, db *sql.DB) string {
 }
 
 func genRandString(length int) string {
+
+	// Use a CSPRNG: these strings are unguessable access tokens for stored
+	// content. Reject the biased tail so the mapping onto charset stays uniform
+	// (len(charset) does not divide 256 evenly).
+	limit := byte(256 - (256 % len(charset)))
+
 	result := make([]byte, length)
+	buf := make([]byte, 1)
 	for i := range result {
-		result[i] = charset[random.Intn(len(charset))]
+		for {
+			if _, err := rand.Read(buf); err != nil {
+				continue
+			}
+			if buf[0] < limit {
+				result[i] = charset[int(buf[0])%len(charset)]
+				break
+			}
+		}
 	}
 	return string(result)
 }
